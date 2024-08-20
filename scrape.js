@@ -7,8 +7,18 @@ const scrape = async () => {
     const url = 'https://books.toscrape.com';
     await page.goto(url);
 
-    const title = await page.title();
-    console.log(`Title: ${title}`);
+    // const title = await page.title();
+    // console.log(`Title: ${title}`);
+
+    const books = await page.evaluate(() => {
+        const bookElements = document.querySelectorAll('.product_pod');
+        return Array.from(bookElements).map((book) => {
+            const title = book.querySelector('h3 a').getAttribute('title');
+            return title;
+        })
+    });
+
+    console.log(books);
 
     await browser.close();
 }
